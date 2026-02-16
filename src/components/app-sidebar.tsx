@@ -1,22 +1,20 @@
 "use client"
 
 import * as React from "react"
+import Link from "next/link"
 import {
-  IconCamera,
-  IconChartBar,
+  IconChecklist,
+  IconCreditCard,
   IconDashboard,
   IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconFolder,
+  IconFileText,
   IconHelp,
   IconInnerShadowTop,
-  IconListDetails,
+  IconReceipt,
   IconReport,
   IconSearch,
   IconSettings,
-  IconUsers,
+  IconShieldCheck,
 } from "@tabler/icons-react"
 
 import { NavDocuments } from "@/components/nav-documents"
@@ -35,89 +33,46 @@ import {
 
 const data = {
   user: {
-    name: "Admin",
+    name: "Finance Admin",
     email: "admin@atyuttama.com",
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard",
       icon: IconDashboard,
     },
     {
-      title: "Lifecycle",
-      url: "#",
-      icon: IconListDetails,
+      title: "Invoices",
+      url: "/dashboard/invoices",
+      icon: IconReceipt,
     },
     {
-      title: "Analytics",
-      url: "#",
-      icon: IconChartBar,
+      title: "Bills",
+      url: "/dashboard/bills",
+      icon: IconFileText,
     },
     {
-      title: "Projects",
-      url: "#",
-      icon: IconFolder,
+      title: "Payments",
+      url: "/dashboard/payments",
+      icon: IconCreditCard,
     },
     {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
-    },
-  ],
-  navClouds: [
-    {
-      title: "Capture",
-      icon: IconCamera,
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
+      title: "Reports",
+      url: "/dashboard/reports",
+      icon: IconReport,
     },
     {
-      title: "Proposal",
-      icon: IconFileDescription,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
+      title: "Compliance",
+      url: "/dashboard/compliance",
+      icon: IconShieldCheck,
     },
   ],
   navSecondary: [
     {
       title: "Settings",
-      url: "#",
+      url: "/dashboard/settings",
       icon: IconSettings,
     },
     {
@@ -133,19 +88,14 @@ const data = {
   ],
   documents: [
     {
-      name: "Data Library",
-      url: "#",
+      name: "Documents",
+      url: "/dashboard/documents",
       icon: IconDatabase,
     },
     {
       name: "Reports",
-      url: "#",
+      url: "/dashboard/reports",
       icon: IconReport,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
     },
   ],
 }
@@ -160,10 +110,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
+              <Link href="/dashboard">
                 <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Atyuttama Inc.</span>
-              </a>
+                <span className="text-base font-semibold">Atyuttama Admin</span>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
