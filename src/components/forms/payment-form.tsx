@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useForm } from "react-hook-form"
+import { useForm, type Resolver } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 
@@ -24,7 +24,10 @@ import {
 } from "@/components/ui/select"
 
 const paymentSchema = z.object({
-  amount: z.coerce.number().min(0.01, "Amount is required"),
+  amount: z
+    .union([z.number(), z.string()])
+    .transform((val) => (typeof val === "string" ? parseFloat(val) || 0 : val))
+    .pipe(z.number().min(0.01, "Amount is required")),
   paymentDate: z.string().min(1, "Date is required"),
   mode: z.enum(["BANK_TRANSFER", "UPI", "CASH", "CARD"]),
   referenceNumber: z.string().optional(),
@@ -48,7 +51,7 @@ export function PaymentForm({
   const [loading, setLoading] = React.useState(false)
 
   const form = useForm<PaymentFormValues>({
-    resolver: zodResolver(paymentSchema),
+    resolver: zodResolver(paymentSchema) as Resolver<PaymentFormValues>,
     defaultValues: {
       amount: 0,
       paymentDate: new Date().toISOString().split("T")[0],

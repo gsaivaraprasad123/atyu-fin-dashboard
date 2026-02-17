@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useForm } from "react-hook-form"
+import { useForm, type Resolver } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { IconPlus, IconTrash } from "@tabler/icons-react"
@@ -24,11 +24,17 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
+const numSchema = (min = 0, max?: number) =>
+  z
+    .union([z.number(), z.string()])
+    .transform((val) => (typeof val === "string" ? parseFloat(val) || 0 : val))
+    .pipe(max !== undefined ? z.number().min(min).max(max) : z.number().min(min))
+
 const itemSchema = z.object({
   description: z.string().min(1, "Required"),
-  quantity: z.coerce.number().min(1),
-  price: z.coerce.number().min(0),
-  taxPercent: z.coerce.number().min(0).max(100),
+  quantity: numSchema(1),
+  price: numSchema(0),
+  taxPercent: numSchema(0, 100),
 })
 
 const invoiceSchema = z.object({
@@ -64,7 +70,7 @@ export function InvoiceForm({
   isSubmitting = false,
 }: InvoiceFormProps) {
   const form = useForm<InvoiceFormValues>({
-    resolver: zodResolver(invoiceSchema),
+    resolver: zodResolver(invoiceSchema) as Resolver<InvoiceFormValues>,
     defaultValues: {
       clientName: defaultValues?.clientName ?? "",
       clientEmail: defaultValues?.clientEmail ?? "",

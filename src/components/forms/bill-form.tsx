@@ -1,6 +1,6 @@
 "use client"
 
-import { useForm } from "react-hook-form"
+import { useForm, type Resolver } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 
@@ -25,7 +25,10 @@ import {
 const billSchema = z.object({
   vendorName: z.string().min(1, "Vendor name is required"),
   billNumber: z.string().optional(),
-  amount: z.coerce.number().min(0, "Amount must be positive"),
+  amount: z
+    .union([z.number(), z.string()])
+    .transform((val) => (typeof val === "string" ? parseFloat(val) || 0 : val))
+    .pipe(z.number().min(0, "Amount must be positive")),
   dueDate: z.string().min(1, "Due date is required"),
   status: z.enum([
     "DRAFT",
@@ -51,7 +54,7 @@ export function BillForm({
   isSubmitting = false,
 }: BillFormProps) {
   const form = useForm<BillFormValues>({
-    resolver: zodResolver(billSchema),
+    resolver: zodResolver(billSchema) as Resolver<BillFormValues>,
     defaultValues: {
       vendorName: defaultValues?.vendorName ?? "",
       billNumber: defaultValues?.billNumber ?? "",
